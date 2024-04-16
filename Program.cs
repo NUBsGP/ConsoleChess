@@ -1,2 +1,14 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System;
+using Board;
+
+namespace XadrezInConsole
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            XadrezBoard board = new XadrezBoard(8, 8);
+            Screen.screen(board);
+        }
+    }
+}

@@ -1,18 +1,22 @@
-﻿
-namespace XadrezInConsole.Board
+﻿namespace Board
 {
     
-    class Board
+    class XadrezBoard
     {
         public int Lines { get; set; }
         public int Columns { get; set; }
-        public Piece[,] Piece { get; set; }
+        private Piece[,] Piece { get; set; }
 
-        public Board(int lines, int columns)
+        public XadrezBoard(int lines, int columns)
         {
             Lines = lines;
             Columns = columns;
             Piece = new Piece[Lines, Columns];
+        }
+
+        public Piece PiecePosition(int lines, int columns)
+        {
+            return Piece[lines, columns];
         }
     }
 }
