@@ -1,5 +1,6 @@
 ﻿using System;
 using Board;
+using XadrezPieces;
 
 namespace XadrezInConsole
 {
@@ -8,7 +9,12 @@ namespace XadrezInConsole
         static void Main(string[] args)
         {
             XadrezBoard board = new XadrezBoard(8, 8);
-            Screen.screen(board);
+
+            board.SetPiece(new Horse(Color.Black, board), new Position(4, 2));
+            board.SetPiece(new Queen(Color.Black, board), new Position(1, 7));
+            board.SetPiece(new Rook(Color.Black, board), new Position(4, 1));
+
+            Screen.BoardView(board);
         }
     }
 }

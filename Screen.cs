@@ -4,7 +4,7 @@ namespace XadrezInConsole
 {
     class Screen
     {
-        public static void screen(XadrezBoard board)
+        public static void BoardView(XadrezBoard board)
         {
             for (int i = 0; i < board.Lines; i++)
             {
@@ -12,17 +12,17 @@ namespace XadrezInConsole
                 {
                     if (board.PiecePosition(i, j) != null)
                     {
-                        if (j != board.Columns-1)
+                        if (j != board.Columns - 1)
                         {
-                            Console.Write($"{board.PiecePosition}   ");
+                            Console.Write($"{board.PiecePosition(i, j)}  ");
                         }
-                        else Console.WriteLine($"{board.PiecePosition}");
+                        else Console.WriteLine($"{board.PiecePosition(i, j)}");
                     }
-                    else 
+                    else
                     {
                         if (j != board.Columns - 1)
                         {
-                            Console.Write("-   ");
+                            Console.Write("-  ");
                         }
                         else Console.WriteLine($"-");
                     }
