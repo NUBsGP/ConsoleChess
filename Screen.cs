@@ -1,4 +1,5 @@
 ﻿using Board;
+using Chess;
 
 namespace ChessInConsole
 {
@@ -42,6 +43,14 @@ namespace ChessInConsole
                 else Console.WriteLine($"{(char)('a' + i)}");
             }
             
+        }
+
+        public static ChessCoordinate ReadPosition()
+        {
+            string imput = Console.ReadLine();
+            char line = imput[0];
+            int column = int.Parse(imput[1] + "");
+            return new ChessCoordinate(line, column);
         }
 
         public static void PiecePrint(Piece piece)

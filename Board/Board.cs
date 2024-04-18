@@ -35,6 +35,16 @@
             Pieces[position.X, position.Y] = piece;
             piece.Position = position;
         }
+        public Piece RemovePiece(Position position)
+        {
+            if (PiecePosition(position) == null) return null;
+            else
+            {
+                Piece piece = PiecePosition(position);
+                Pieces[position.X, position.Y] = null;
+                return piece;
+            }
+        }
 
         public bool ExistingPiece(Position position)
         {

@@ -14,5 +14,10 @@
             this.Board = board;
             this.AmountOfMovements = 0;
         }
+
+        public void AddMovement()
+        {
+            AmountOfMovements++;
+        }
     }
 }
