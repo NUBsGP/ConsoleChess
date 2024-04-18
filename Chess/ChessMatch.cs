@@ -27,7 +27,7 @@ namespace Chess
             Board.SetPiece(piece, destination);
         }
 
-        private void SetPieces()
+        /*private void SetPieces()
         {
             Board.SetPiece(new Rook(Color.White, Board), new ChessCoordinate('a', 8).ChessToPosition());
             Board.SetPiece(new Horse(Color.White, Board), new ChessCoordinate('b', 8).ChessToPosition());
@@ -66,6 +66,11 @@ namespace Chess
             Board.SetPiece(new Pawn(Color.Black, Board), new ChessCoordinate('f', 2).ChessToPosition());
             Board.SetPiece(new Pawn(Color.Black, Board), new ChessCoordinate('g', 2).ChessToPosition());
             Board.SetPiece(new Pawn(Color.Black, Board), new ChessCoordinate('h', 2).ChessToPosition());
+        }*/
+        private void SetPieces() 
+        { 
+            Board.SetPiece(new Rook(Color.White, Board), new ChessCoordinate('e', 4).ChessToPosition());
+            Board.SetPiece(new King(Color.White, Board), new ChessCoordinate('e', 5).ChessToPosition());
         }
     }
 }

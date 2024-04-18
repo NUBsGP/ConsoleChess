@@ -9,40 +9,62 @@ namespace ChessInConsole
         {
             for (int i = 0; i < board.Lines; i++)
             {
-                Console.Write($"{8-i} ");
+                Console.Write($"{8 - i} ");
                 for (int j = 0; j < board.Columns; j++)
                 {
-                    if (board.PiecePosition(i, j) != null)
+                    if (j != board.Columns - 1)
                     {
-                        if (j != board.Columns - 1)
-                        {
-                            PiecePrint(board.PiecePosition(i, j)); 
-                            Console.Write("  ");
-                        }
-                        else
-                        {
-                            PiecePrint(board.PiecePosition(i, j));
-                            Console.WriteLine();
-                        }
+                        PiecePrint(board.PiecePosition(i, j));
+                        Console.Write("  ");
                     }
                     else
                     {
-                        if (j != board.Columns - 1)
-                        {
-                            Console.Write("-  ");
-                        }
-                        else Console.WriteLine($"-");
+                        PiecePrint(board.PiecePosition(i, j));
+                        Console.WriteLine();
                     }
                 }
-                
+
             }
             Console.Write("  ");
             for (int i = 0; i < board.Columns; i++)
             {
-                if (i != board.Columns - 1) Console.Write($"{(char) ('a' + i)}  ");
+                if (i != board.Columns - 1) Console.Write($"{(char)('a' + i)}  ");
                 else Console.WriteLine($"{(char)('a' + i)}");
             }
-            
+
+        }
+        public static void BoardView(ChessBoard board, bool[,] possibleMovements)
+        {
+            ConsoleColor originalBackground = Console.BackgroundColor;
+            for (int i = 0; i < board.Lines; i++)
+            {
+                Console.Write($"{8 - i} ");
+                for (int j = 0; j < board.Columns; j++)
+                {
+                    if (possibleMovements[i,j]) Console.BackgroundColor = ConsoleColor.DarkGray;
+                    if (j != board.Columns - 1)
+                    {
+                        PiecePrint(board.PiecePosition(i, j));
+                        Console.BackgroundColor = originalBackground;
+                        Console.Write("  ");
+                    }
+                    else
+                    {
+                        PiecePrint(board.PiecePosition(i, j));
+                        Console.BackgroundColor = originalBackground;
+                        Console.WriteLine();
+                    }
+
+                }
+
+            }
+            Console.Write("  ");
+            for (int i = 0; i < board.Columns; i++)
+            {
+                if (i != board.Columns - 1) Console.Write($"{(char)('a' + i)}  ");
+                else Console.WriteLine($"{(char)('a' + i)}");
+            }
+
         }
 
         public static ChessCoordinate ReadPosition()
@@ -55,7 +77,11 @@ namespace ChessInConsole
 
         public static void PiecePrint(Piece piece)
         {
-            if (piece.Color == Color.White)
+            if (piece == null)
+            {
+                Console.Write("-");
+            }
+            else if (piece.Color == Color.White)
             {
                 ConsoleColor consoleColor = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.White;

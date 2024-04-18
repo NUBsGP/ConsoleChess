@@ -10,6 +10,11 @@
             this.X = x;
             this.Y = y;
         }
+        public void SetPosition(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
         public override string ToString()
         {
             return $"{X}, {Y}";

@@ -18,6 +18,12 @@ namespace ChessInConsole
                     Screen.BoardView(chessMatch.Board);
                     Console.Write("Enter origin coordinate of piece: ");
                     Position origin = Screen.ReadPosition().ChessToPosition();
+
+                    bool[,] possiblePositions = chessMatch.Board.PiecePosition(origin).PossibleMovements();
+
+                    Console.Clear();
+                    Screen.BoardView(chessMatch.Board, possiblePositions);
+
                     Console.Write("Enter destination coordinate of piece: ");
                     Position destination = Screen.ReadPosition().ChessToPosition();
                     chessMatch.MovimentPiece(origin, destination);
