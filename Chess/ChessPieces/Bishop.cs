@@ -1,10 +1,10 @@
 ﻿using Board;
 
-namespace XadrezPieces
+namespace Chess
 {
     class Bishop : Piece
     {
-        public Bishop(Color color, XadrezBoard board) : base(color, board)
+        public Bishop(Color color, ChessBoard board) : base(color, board)
         {
         }
         public override string ToString()

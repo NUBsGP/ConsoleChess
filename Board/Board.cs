@@ -1,19 +1,19 @@
 ﻿namespace Board
 {
-    class XadrezBoard
+    class ChessBoard
     {
         public int Lines { get; set; }
         public int Columns { get; set; }
         private Piece[,] Pieces { get; set; }
 
-        public XadrezBoard(int lines, int columns)
+        public ChessBoard(int lines, int columns)
         {
             Lines = lines;
             Columns = columns;
             Pieces = new Piece[Lines, Columns];
         }
 
-        public XadrezBoard(Position position)
+        public ChessBoard(Position position)
         {
             Lines = position.X;
             Columns = position.Y;

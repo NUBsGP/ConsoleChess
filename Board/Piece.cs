@@ -1,15 +1,13 @@
-﻿using Board;
-
-namespace Board
+﻿namespace Board
 {
     class Piece
     {
         public Position Position { get; set; }
         public Color Color { get; set; }
-        public XadrezBoard Board { get; set; }
+        public ChessBoard Board { get; set; }
         public int AmountOfMovements { get; set; }
 
-        public Piece(Color color, XadrezBoard board)
+        public Piece(Color color, ChessBoard board)
         {
             this.Position = null;
             this.Color = color;

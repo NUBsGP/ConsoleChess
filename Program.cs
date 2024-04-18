@@ -1,8 +1,8 @@
 ﻿using System;
 using Board;
-using XadrezPieces;
+using Chess;
 
-namespace XadrezInConsole
+namespace ChessInConsole
 {
     class Program
     {
@@ -10,12 +10,9 @@ namespace XadrezInConsole
         {
             try
             {
-                XadrezBoard board = new XadrezBoard(8, 8);
+                ChessBoard board = new ChessBoard(8, 8);
 
-                board.SetPiece(new Horse(Color.Black, board), new Position(4, 2));
-                board.SetPiece(new King(Color.Black, board), new Position(4, 3));
-                board.SetPiece(new Queen(Color.Black, board), new Position(1, 7));
-                board.SetPiece(new Rook(Color.Black, board), new Position(4, 1));
+                board.SetPiece(new Horse(Color.Black, board), new ChessCoordinate('b', 1).ChessToPosition());
 
                 Screen.BoardView(board);
             }

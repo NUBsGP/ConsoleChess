@@ -1,10 +1,10 @@
 ﻿using Board;
 
-namespace XadrezInConsole
+namespace ChessInConsole
 {
     class Screen
     {
-        public static void BoardView(XadrezBoard board)
+        public static void BoardView(ChessBoard board)
         {
             for (int i = 0; i < board.Lines; i++)
             {
