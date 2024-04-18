@@ -8,15 +8,21 @@ namespace ChessInConsole
         {
             for (int i = 0; i < board.Lines; i++)
             {
+                Console.Write($"{8-i} ");
                 for (int j = 0; j < board.Columns; j++)
                 {
                     if (board.PiecePosition(i, j) != null)
                     {
                         if (j != board.Columns - 1)
                         {
-                            Console.Write($"{board.PiecePosition(i, j)}  ");
+                            PiecePrint(board.PiecePosition(i, j)); 
+                            Console.Write("  ");
                         }
-                        else Console.WriteLine($"{board.PiecePosition(i, j)}");
+                        else
+                        {
+                            PiecePrint(board.PiecePosition(i, j));
+                            Console.WriteLine();
+                        }
                     }
                     else
                     {
@@ -27,6 +33,32 @@ namespace ChessInConsole
                         else Console.WriteLine($"-");
                     }
                 }
+                
+            }
+            Console.Write("  ");
+            for (int i = 0; i < board.Columns; i++)
+            {
+                if (i != board.Columns - 1) Console.Write($"{(char) ('a' + i)}  ");
+                else Console.WriteLine($"{(char)('a' + i)}");
+            }
+            
+        }
+
+        public static void PiecePrint(Piece piece)
+        {
+            if (piece.Color == Color.White)
+            {
+                ConsoleColor consoleColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(piece);
+                Console.ForegroundColor = consoleColor;
+            }
+            else
+            {
+                ConsoleColor consoleColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(piece);
+                Console.ForegroundColor = consoleColor;
             }
         }
     }
