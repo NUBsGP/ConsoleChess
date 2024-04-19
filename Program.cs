@@ -14,24 +14,43 @@ namespace ChessInConsole
                 ChessMatch chessMatch = new ChessMatch();
                 while (!chessMatch.EndMatch)
                 {
-                    Console.Clear();
-                    Screen.BoardView(chessMatch.Board);
-                    Console.Write("Enter origin coordinate of piece: ");
-                    Position origin = Screen.ReadPosition().ChessToPosition();
+                    try
+                    {
+                        Console.Clear();
+                        Screen.BoardView(chessMatch.Board);
 
-                    bool[,] possiblePositions = chessMatch.Board.PiecePosition(origin).PossibleMovements();
+                        Console.WriteLine($"\nTurno: {chessMatch.Turn}\n" +
+                                          $"Waiting move from: {chessMatch.PlayerColor}");
 
-                    Console.Clear();
-                    Screen.BoardView(chessMatch.Board, possiblePositions);
+                        Console.Write("\nEnter origin coordinate of piece: ");
+                        Position origin = Screen.ReadPosition().ChessToPosition();
+                        chessMatch.ValidatinOriginPosition(origin);
 
-                    Console.Write("Enter destination coordinate of piece: ");
-                    Position destination = Screen.ReadPosition().ChessToPosition();
-                    chessMatch.MovimentPiece(origin, destination);
+                        bool[,] possiblePositions = chessMatch.Board.PiecePosition(origin).PossibleMovements();
+
+                        Console.Clear();
+                        Screen.BoardView(chessMatch.Board, possiblePositions);
+
+                        Console.WriteLine($"\nTurno: {chessMatch.Turn}\n" +
+                                          $"Waiting move from: {chessMatch.PlayerColor}");
+
+                        Console.Write("\nEnter destination coordinate of piece: ");
+                        Position destination = Screen.ReadPosition().ChessToPosition();
+
+                        chessMatch.ValidatinDestinationPosition(origin, destination);
+
+                        chessMatch.MakeMove(origin, destination);
+                    }
+                    catch (BoardException exception)
+                    {
+                        Console.WriteLine($"\nError! {exception.Message}\nPress enter to continue!");
+                        Console.ReadLine();
+                    }
                 }
             }
             catch (BoardException exception)
             {
-                Console.WriteLine($"Error! {exception.Message}");
+                Console.WriteLine($"\nError! {exception.Message}");
             }
         }
     }

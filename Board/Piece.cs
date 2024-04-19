@@ -21,6 +21,24 @@
             AmountOfMovements++;
         }
 
+        public bool ExistPossibleMovement()
+        {
+            bool[,] existPossibleMovement = PossibleMovements();
+            for (int i = 0; i < existPossibleMovement.GetLength(0); i++)
+            {
+                for (int j = 0; j < existPossibleMovement.GetLength(1); j++)
+                {
+                    if (existPossibleMovement[i, j]) return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CanMoveFromPosition(Position position)
+        {
+            return PossibleMovements()[position.X, position.Y];
+        }
+
         public abstract bool[,] PossibleMovements();
     }
 }

@@ -7,6 +7,7 @@ namespace ChessInConsole
     {
         public static void BoardView(ChessBoard board)
         {
+            int switchColor = 0;
             for (int i = 0; i < board.Lines; i++)
             {
                 Console.Write($"{8 - i} ");
@@ -41,7 +42,7 @@ namespace ChessInConsole
                 Console.Write($"{8 - i} ");
                 for (int j = 0; j < board.Columns; j++)
                 {
-                    if (possibleMovements[i,j]) Console.BackgroundColor = ConsoleColor.DarkGray;
+                    if (possibleMovements[i, j]) Console.BackgroundColor = ConsoleColor.DarkGray;
                     if (j != board.Columns - 1)
                     {
                         PiecePrint(board.PiecePosition(i, j));

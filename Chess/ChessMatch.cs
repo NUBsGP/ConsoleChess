@@ -6,8 +6,8 @@ namespace Chess
     class ChessMatch
     {
         public ChessBoard Board { get; private set; }
-        private int Turn;
-        private Color PlayerColor;
+        public int Turn { get; private set; }
+        public Color PlayerColor { get; private set; }
         public bool EndMatch { get; private set; }
 
         public ChessMatch()
@@ -25,6 +25,31 @@ namespace Chess
             piece.AddMovement();
             Piece capturedPiece = Board.RemovePiece(destination);
             Board.SetPiece(piece, destination);
+        }
+
+        public void MakeMove(Position origin, Position destination)
+        {
+            MovimentPiece(origin, destination);
+            Turn++;
+            SwitchPlayer();
+        }
+
+        public void ValidatinOriginPosition(Position origin)
+        {
+            if (Board.PiecePosition(origin) == null) throw new BoardException("There is no piece in the chosen origin position!");
+            if (PlayerColor != Board.PiecePosition(origin).Color) throw new BoardException("The origin piece chosen is not yours!");
+            if (!Board.PiecePosition(origin).ExistPossibleMovement()) throw new BoardException("There are no possible moves for the chosen origin piece!");
+        }
+
+        public void ValidatinDestinationPosition(Position origin, Position destination)
+        {
+            if (!Board.PiecePosition(origin).CanMoveFromPosition(destination)) throw new BoardException("Invalid destination position!");
+        }
+
+        public void SwitchPlayer() 
+        {
+            if (PlayerColor == Color.White) PlayerColor = Color.Black;
+            else PlayerColor = Color.White;
         }
 
         /*private void SetPieces()
