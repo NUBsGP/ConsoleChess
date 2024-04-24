@@ -5,9 +5,43 @@ namespace ChessInConsole
 {
     class Screen
     {
+        public static void PrintChessMatch(ChessMatch chessMatch)
+        {
+            BoardView(chessMatch.Board);
+            Console.WriteLine();
+            PrintCapturedPieces(chessMatch);
+
+            Console.WriteLine($"\nTurno: {chessMatch.Turn}\n" +
+                              $"Waiting move from: {chessMatch.PlayerColor}");
+        }
+
+        private static void PrintCapturedPieces(ChessMatch chessMatch)
+        {
+            Console.WriteLine($"Captured Pieces:");
+            ConsoleColor consoleColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write($"White: [");
+            List<Piece> pieces = chessMatch.ColorCapturedPieces(Color.White).ToList();
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                if (i != pieces.Count - 1) Console.Write($"{pieces[i]} ");
+                else Console.Write(pieces[i]);
+            }
+            Console.WriteLine("]");
+            
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Black: [");
+            pieces = chessMatch.ColorCapturedPieces(Color.Black).ToList();
+            for (int i = 0; i < pieces.Count; i++)
+            {
+                if (i != pieces.Count - 1) Console.Write($"{pieces[i]} ");
+                else Console.Write(pieces[i]);
+            }
+            Console.WriteLine("]");
+            Console.ForegroundColor = consoleColor;
+        }
         public static void BoardView(ChessBoard board)
         {
-            int switchColor = 0;
             for (int i = 0; i < board.Lines; i++)
             {
                 Console.Write($"{8 - i} ");

@@ -17,10 +17,7 @@ namespace ChessInConsole
                     try
                     {
                         Console.Clear();
-                        Screen.BoardView(chessMatch.Board);
-
-                        Console.WriteLine($"\nTurno: {chessMatch.Turn}\n" +
-                                          $"Waiting move from: {chessMatch.PlayerColor}");
+                        Screen.PrintChessMatch(chessMatch);
 
                         Console.Write("\nEnter origin coordinate of piece: ");
                         Position origin = Screen.ReadPosition().ChessToPosition();
