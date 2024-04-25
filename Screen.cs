@@ -11,8 +11,17 @@ namespace ChessInConsole
             Console.WriteLine();
             PrintCapturedPieces(chessMatch);
 
-            Console.WriteLine($"\nTurno: {chessMatch.Turn}\n" +
-                              $"Waiting move from: {chessMatch.PlayerColor}");
+            if (!chessMatch.EndMatch)
+            {
+                Console.WriteLine($"\nTurno: {chessMatch.Turn}\n" +
+                                  $"Waiting move from: {chessMatch.PlayerColor}");
+                if (chessMatch.Check) Console.WriteLine("\nCheck!");
+            }
+            else
+            {
+                Console.WriteLine("\nCheckmate!\n" +
+                                 $"Winner: {chessMatch.PlayerColor}");
+            }
         }
 
         private static void PrintCapturedPieces(ChessMatch chessMatch)
@@ -28,7 +37,7 @@ namespace ChessInConsole
                 else Console.Write(pieces[i]);
             }
             Console.WriteLine("]");
-            
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("Black: [");
             pieces = chessMatch.ColorCapturedPieces(Color.Black).ToList();

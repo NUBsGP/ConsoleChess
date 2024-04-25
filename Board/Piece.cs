@@ -21,6 +21,11 @@
             AmountOfMovements++;
         }
 
+        public void RemoveMovement()
+        {
+            AmountOfMovements--;
+        }
+
         public bool ExistPossibleMovement()
         {
             bool[,] existPossibleMovement = PossibleMovements();

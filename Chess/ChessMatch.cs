@@ -11,32 +11,110 @@ namespace Chess
         public bool EndMatch { get; private set; }
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
+        public bool Check { get; private set; }
 
         public ChessMatch()
         {
             Board = new(8, 8);
             Turn = 1;
             PlayerColor = Color.White;
+            EndMatch = false;
+            Check = false;
             Pieces = new HashSet<Piece>();
             CapturedPieces = new HashSet<Piece>();
-            EndMatch = false;
             SetPieces();
         }
 
-        public void MovimentPiece(Position origin, Position destination)
+        private Color Adversary(Color color)
+        {
+            if (color == Color.White) return Color.Black;
+            else return Color.White;
+        }
+
+        private Piece King(Color color)
+        {
+            foreach (Piece piece in PiecesInGame(color)) if (piece is King) return piece;
+            return null;
+        }
+
+        public bool IsInCheck(Color color)
+        {
+            Piece king = King(color);
+            if (king == null) throw new BoardException($"There is no {color} king on the board");
+            foreach (Piece piece in PiecesInGame(Adversary(color)))
+            {
+                bool[,] checkVerification = piece.PossibleMovements();
+                if (checkVerification[king.Position.X, king.Position.Y]) return true;
+            }
+            return false;
+        }
+
+        public bool CheckmateTest(Color color)
+        {
+            if (!IsInCheck(color)) return false;
+            foreach (Piece piece in PiecesInGame(color))
+            {
+                bool[,] possiblesMovements = piece.PossibleMovements();
+                for (int i = 0; i < Board.Lines; i++)
+                {
+                    for (int j = 0; j < Board.Columns; j++)
+                    {
+                        if (possiblesMovements[i, j])
+                        {
+                            Position origin = piece.Position;
+                            Position destination = new Position(i, j);
+                            Piece capturedPiece = MovimentPiece(origin, destination);
+                            bool checkTest = IsInCheck(color);
+                            UndoMove(origin, destination, capturedPiece);
+                            if (!checkTest) return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public Piece MovimentPiece(Position origin, Position destination)
         {
             Piece piece = Board.RemovePiece(origin);
             piece.AddMovement();
             Piece capturedPiece = Board.RemovePiece(destination);
             Board.SetPiece(piece, destination);
             if (capturedPiece != null) CapturedPieces.Add(capturedPiece);
+            return capturedPiece;
         }
 
         public void MakeMove(Position origin, Position destination)
         {
-            MovimentPiece(origin, destination);
-            Turn++;
-            SwitchPlayer();
+            Piece capturedPiece = MovimentPiece(origin, destination);
+            if (IsInCheck(PlayerColor))
+            {
+                UndoMove(origin, destination, capturedPiece);
+                throw new BoardException("You can't put yourself in check");
+            }
+
+            if (IsInCheck(Adversary(PlayerColor))) Check = true;
+            else Check = false;
+
+            if (CheckmateTest(Adversary(PlayerColor))) EndMatch = true;
+            else
+            {
+                Turn++;
+                SwitchPlayer();
+            }
+
+        }
+
+        public void UndoMove(Position origin, Position destination, Piece capturedPiece)
+        {
+            Piece piece = Board.RemovePiece(destination);
+            piece.RemoveMovement();
+            if (capturedPiece != null)
+            {
+                Board.SetPiece(capturedPiece, destination);
+                CapturedPieces.Remove(capturedPiece);
+            }
+            Board.SetPiece(piece, origin);
         }
 
         public void ValidatinOriginPosition(Position origin)
@@ -51,7 +129,7 @@ namespace Chess
             if (!Board.PiecePosition(origin).CanMoveFromPosition(destination)) throw new BoardException("Invalid destination position!");
         }
 
-        public void SwitchPlayer() 
+        public void SwitchPlayer()
         {
             if (PlayerColor == Color.White) PlayerColor = Color.Black;
             else PlayerColor = Color.White;
@@ -77,15 +155,29 @@ namespace Chess
             Board.SetPiece(piece, new ChessCoordinate(column, line).ChessToPosition());
             Pieces.Add(piece);
         }
-        private void SetPieces() 
+        private void SetPieces()
         {
-            SetNewPiece('a', 1, new Rook(Color.Black, Board));
+            /*SetNewPiece('c', 1, new Rook(Color.Black, Board));
             SetNewPiece('d', 1, new King(Color.Black, Board));
-            SetNewPiece('h', 1, new Rook(Color.Black, Board));
-            
-            SetNewPiece('a', 8, new Rook(Color.White, Board));
+            SetNewPiece('e', 1, new Rook(Color.Black, Board));
+
+            SetNewPiece('c', 2, new Rook(Color.Black, Board));
+            SetNewPiece('d', 2, new Rook(Color.Black, Board));
+            SetNewPiece('e', 2, new Rook(Color.Black, Board));
+
+            SetNewPiece('c', 7, new Rook(Color.White, Board));
+            SetNewPiece('d', 7, new Rook(Color.White, Board));
+            SetNewPiece('e', 7, new Rook(Color.White, Board));
+
+            SetNewPiece('c', 8, new Rook(Color.White, Board));
             SetNewPiece('d', 8, new King(Color.White, Board));
-            SetNewPiece('h', 8, new Rook(Color.White, Board));
+            SetNewPiece('e', 8, new Rook(Color.White, Board));*/
+            SetNewPiece('a', 1, new King(Color.Black, Board));
+            SetNewPiece('b', 3, new King(Color.White, Board));
+            SetNewPiece('b', 1, new Rook(Color.White, Board));
+            SetNewPiece('b', 2, new Rook(Color.White, Board));
+            SetNewPiece('c', 1, new Rook(Color.White, Board));
+            SetNewPiece('a', 3, new Rook(Color.White, Board));
         }
     }
 }
