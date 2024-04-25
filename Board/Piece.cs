@@ -38,6 +38,11 @@
             }
             return false;
         }
+        public bool CanMove(Position position)
+        {
+            Piece piece = Board.PiecePosition(position);
+            return piece == null || piece.Color != Color;
+        }
 
         public bool CanMoveFromPosition(Position position)
         {

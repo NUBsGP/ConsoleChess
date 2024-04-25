@@ -10,11 +10,6 @@ namespace Chess {
             return "R";
         }
 
-        public bool CanMove(Position position){
-            Piece piece = Board.PiecePosition(position);
-            return piece == null || piece.Color != Color;
-        }
-
         public override bool[,] PossibleMovements() {
             bool[,] possibleMovements = new bool[Board.Lines, Board.Columns];
 
