@@ -148,6 +148,16 @@ namespace Chess
 
             Piece piece = Board.PiecePosition(destination);
 
+            //special move promotion
+            if (piece is Pawn && ((piece.Color == Color.White && piece.Position.X == 0) || (piece.Color == Color.Black && piece.Position.X == 7)))
+            {
+                piece = Board.RemovePiece(destination);
+                Pieces.Remove(piece);
+                Piece chosenPiece = ChosenPiece(piece.Color);
+                Board.SetPiece(chosenPiece, destination);
+                Pieces.Add(chosenPiece);
+            }
+
             //special move en passant
             if (piece is Pawn && (destination.X == origin.X - 2 || destination.X == origin.X + 2))
             {
@@ -159,6 +169,40 @@ namespace Chess
             }
 
 
+        }
+
+        public Piece ChosenPiece(Color color)
+        {
+            Console.Write("\nYour Pokemon(Pawn) is evolving :)\n\n" +
+                            "Queen = Q\n" +
+                            "Rook = R\n" +
+                            "Bishop = B\n" +
+                            "Horse = H\n\n" +
+                            "Chose your evolution (Q/R/B/H): ");
+
+            char Chosen = char.Parse(Console.ReadLine());
+
+            if (Chosen == 'Q' || Chosen == 'q')
+            {
+                return new Queen(color, Board);
+            }
+            
+            if (Chosen == 'R' || Chosen == 'r')
+            {
+                return new Rook(color, Board);
+            }
+            
+            if (Chosen == 'B' || Chosen == 'b')
+            {
+                return new Bishop(color, Board);
+            }
+            
+            if (Chosen == 'H' || Chosen == 'h')
+            {
+                return new Horse(color, Board);
+            }
+
+            return null;
         }
 
         public void UndoMove(Position origin, Position destination, Piece capturedPiece)
@@ -262,7 +306,7 @@ namespace Chess
         {
             SetNewPiece('e', 1, new King(Color.White, Board, this));
             SetNewPiece('e', 8, new King(Color.Black, Board, this));
-            SetNewPiece('e', 2, new Pawn(Color.White, Board, this));
+            SetNewPiece('a', 7, new Pawn(Color.White, Board, this));
             SetNewPiece('d', 7, new Pawn(Color.Black, Board, this));
         }
     }
