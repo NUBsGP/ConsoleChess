@@ -4,15 +4,21 @@ namespace Chess
 {
     class King : Piece
     {
-        public King(Color color, ChessBoard board) : base(color, board)
+        private ChessMatch chessMatch;
+        public King(Color color, ChessBoard board, ChessMatch chessMatch) : base(color, board)
         {
-            
+            this.chessMatch = chessMatch;
         }
         public override string ToString()
         {
             return "K";
         }
         
+        private bool testRookCastling(Position position)
+        {
+            Piece piece = Board.PiecePosition(position);
+            return piece != null && piece is Rook && piece.Color == Color && piece.AmountOfMovements == 0;
+        }
         public override bool[,] PossibleMovements()
         {
             bool[,] possibleMovements = new bool[Board.Lines,Board.Columns];
@@ -73,6 +79,38 @@ namespace Chess
             {
                 possibleMovements[position.X, position.Y] = true;
             }
+
+            //especial move small castling
+            if (AmountOfMovements == 0 && !chessMatch.Check)
+            {
+                Position rook = new(Position.X, Position.Y + 3);
+                if (testRookCastling(rook))
+                {
+                    Position position1 = new(Position.X, Position.Y + 1);
+                    Position position2 = new(Position.X, Position.Y + 2);
+                    if (Board.PiecePosition(position1) == null && Board.PiecePosition(position2) == null)
+                    {
+                        possibleMovements[Position.X, Position.Y + 2] = true;
+                    }
+                }
+            }
+
+            //especial move big castling
+            if (AmountOfMovements == 0 && !chessMatch.Check)
+            {
+                Position rook = new(Position.X, Position.Y - 4);
+                if (testRookCastling(rook))
+                {
+                    Position position1 = new(Position.X, Position.Y - 1);
+                    Position position2 = new(Position.X, Position.Y - 2);
+                    Position position3 = new(Position.X, Position.Y - 3);
+                    if (Board.PiecePosition(position1) == null && Board.PiecePosition(position2) == null && Board.PiecePosition(position3) == null)
+                    {
+                        possibleMovements[Position.X, Position.Y - 2] = true;
+                    }
+                }
+            }
+
             return possibleMovements;
         }
     }
