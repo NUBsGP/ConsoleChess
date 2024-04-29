@@ -1,6 +1,5 @@
 ﻿using Board;
 using ChessInConsole;
-using ChessInConsole;
 using System.Net.NetworkInformation;
 
 namespace Chess
@@ -14,6 +13,7 @@ namespace Chess
         private HashSet<Piece> Pieces;
         private HashSet<Piece> CapturedPieces;
         public bool Check { get; private set; }
+        public Piece VulnerableEnPassant { get; private set; }
 
         public ChessMatch()
         {
@@ -22,6 +22,7 @@ namespace Chess
             PlayerColor = Color.White;
             EndMatch = false;
             Check = false;
+            VulnerableEnPassant = null;
             Pieces = new HashSet<Piece>();
             CapturedPieces = new HashSet<Piece>();
             SetPieces();
@@ -84,7 +85,7 @@ namespace Chess
             Board.SetPiece(piece, destination);
             if (capturedPiece != null) CapturedPieces.Add(capturedPiece);
 
-            // especial move small castling
+            // special move small castling
             if (piece is King && destination.Y == origin.Y + 2)
             {
                 Position originRook = new(origin.X, origin.Y + 3);
@@ -93,8 +94,8 @@ namespace Chess
                 rook.AddMovement();
                 Board.SetPiece(rook, destinationRook);
             }
-            
-            // especial move big castling
+
+            // special move big castling
             if (piece is King && destination.Y == origin.Y - 2)
             {
                 Position originRook = new(origin.X, origin.Y - 4);
@@ -102,6 +103,24 @@ namespace Chess
                 Piece rook = Board.RemovePiece(originRook);
                 rook.AddMovement();
                 Board.SetPiece(rook, destinationRook);
+            }
+
+            // special move en passant
+            if (piece is Pawn && destination.Y != origin.Y && capturedPiece == null)
+            {
+                Position enemyPosition;
+                if (piece.Color == Color.White)
+                {
+                    enemyPosition = new(destination.X + 1, destination.Y);
+                }
+
+                else
+                {
+                    enemyPosition = new(destination.X - 1, destination.Y);
+                }
+
+                capturedPiece = Board.RemovePiece(enemyPosition);
+                CapturedPieces.Add(capturedPiece);
             }
 
             return capturedPiece;
@@ -127,18 +146,78 @@ namespace Chess
                 SwitchPlayer();
             }
 
+            Piece piece = Board.PiecePosition(destination);
+
+            //special move en passant
+            if (piece is Pawn && (destination.X == origin.X - 2 || destination.X == origin.X + 2))
+            {
+                VulnerableEnPassant = piece;
+            }
+            else
+            {
+                //VulnerableEnPassant = null;
+            }
+
+
         }
 
         public void UndoMove(Position origin, Position destination, Piece capturedPiece)
         {
-            Piece piece = Board.RemovePiece(destination);
-            piece.RemoveMovement();
-            if (capturedPiece != null)
+            Piece piece1 = Board.PiecePosition(destination);
+            
+
+            // special move small castling
+            if (piece1 is King && destination.Y == origin.Y + 2)
             {
-                Board.SetPiece(capturedPiece, destination);
-                CapturedPieces.Remove(capturedPiece);
+                Position originRook = new(origin.X, origin.Y + 3);
+                Position destinationRook = new(origin.X, origin.Y + 1);
+                Piece rook = Board.RemovePiece(destinationRook);
+                rook.RemoveMovement();
+                Board.SetPiece(rook, originRook);
             }
-            Board.SetPiece(piece, origin);
+
+            // special move big castling
+            else if (piece1 is King && destination.Y == origin.Y - 2)
+            {
+                Position originRook = new(origin.X, origin.Y - 4);
+                Position destinationRook = new(origin.X, origin.Y - 1);
+                Piece rook = Board.RemovePiece(destinationRook);
+                rook.RemoveMovement();
+                Board.SetPiece(rook, originRook);
+            }
+
+            // special move en passant
+            else if (piece1 is Pawn && destination.X != origin.X && capturedPiece == VulnerableEnPassant)
+            {
+                Piece pawn = Board.RemovePiece(destination);
+                pawn.RemoveMovement();
+                Board.SetPiece(pawn, origin);
+
+                Position enemyPosition;
+                if (piece1.Color == Color.White)
+                {
+                    enemyPosition = new(destination.X + 1, destination.Y);
+                }
+
+                else
+                {
+                    enemyPosition = new(destination.X - 1, destination.Y);
+                }
+
+                Board.SetPiece(capturedPiece, enemyPosition);
+            }
+
+            else
+            {
+                Piece piece = Board.RemovePiece(destination);
+                piece.RemoveMovement();
+                if (capturedPiece != null)
+                {
+                    Board.SetPiece(capturedPiece, destination);
+                    CapturedPieces.Remove(capturedPiece);
+                }
+                Board.SetPiece(piece, origin);
+            }
         }
 
         public void ValidatinOriginPosition(Position origin)
@@ -181,10 +260,10 @@ namespace Chess
         }
         private void SetPieces()
         {
-            SetNewPiece('a', 1, new Rook(Color.White, Board));
-            SetNewPiece('e', 1, new King(Color.White, this.Board, this));
-            SetNewPiece('h', 1, new Rook(Color.White, Board));
-            
+            SetNewPiece('e', 1, new King(Color.White, Board, this));
+            SetNewPiece('e', 8, new King(Color.Black, Board, this));
+            SetNewPiece('e', 2, new Pawn(Color.White, Board, this));
+            SetNewPiece('d', 7, new Pawn(Color.Black, Board, this));
         }
     }
 }

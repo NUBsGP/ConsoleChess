@@ -1,11 +1,13 @@
 ﻿using Board;
 
-namespace Chess
-{
+namespace Chess 
+{ 
     class Pawn : Piece
     {
-        public Pawn(Color color, ChessBoard board) : base(color, board)
+        private ChessMatch ChessMatch;
+        public Pawn(Color color, ChessBoard board, ChessMatch chessMatch) : base(color, board)
         {
+            ChessMatch = chessMatch;
         }
         public override string ToString()
         {
@@ -53,6 +55,22 @@ namespace Chess
                 {
                     possibleMovements[position.X, position.Y] = true;
                 }
+
+                //spacial move en passant
+                if (Position.X == 3)
+                {
+                    Position left = new(Position.X, Position.Y - 1);
+                    if (Board.ValidPosition(left) && ThereIsEnemy(left) && Board.PiecePosition(left) == ChessMatch.VulnerableEnPassant)
+                    {
+                        possibleMovements[left.X-1, left.Y] = true;
+                    }
+                    
+                    Position right = new(Position.X, Position.Y + 1);
+                    if (Board.ValidPosition(right) && ThereIsEnemy(right) && Board.PiecePosition(right) == ChessMatch.VulnerableEnPassant)
+                    {
+                        possibleMovements[right.X-1, right.Y] = true;
+                    }
+                }
             }
             
             else
@@ -79,6 +97,22 @@ namespace Chess
                 if (Board.ValidPosition(position) && FreePosition(position) && ThereIsEnemy(position))
                 {
                     possibleMovements[position.X, position.Y] = true;
+                }
+
+                //spacial move en passant
+                if (Position.X == 4)
+                {
+                    Position left = new(Position.X, Position.Y - 1);
+                    if (Board.ValidPosition(left) && ThereIsEnemy(left) && Board.PiecePosition(left) == ChessMatch.VulnerableEnPassant)
+                    {
+                        possibleMovements[left.X+1, left.Y] = true;
+                    }
+
+                    Position right = new(Position.X, Position.Y + 1);
+                    if (Board.ValidPosition(right) && ThereIsEnemy(right) && Board.PiecePosition(right) == ChessMatch.VulnerableEnPassant)
+                    {
+                        possibleMovements[right.X+1, right.Y] = true;
+                    }
                 }
             }
 

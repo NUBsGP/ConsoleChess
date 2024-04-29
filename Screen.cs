@@ -114,6 +114,7 @@ namespace ChessInConsole
         public static ChessCoordinate ReadPosition()
         {
             string imput = Console.ReadLine();
+            
             char line = imput[0];
             int column = int.Parse(imput[1] + "");
             return new ChessCoordinate(line, column);

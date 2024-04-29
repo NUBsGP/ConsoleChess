@@ -17,7 +17,6 @@ namespace Chess
         {
             return new Position((8 - Lines), (Columns - 'a'));
         }
-        int c = 'a';
         public override string ToString()
         {
             return $"{Columns}{Lines}";

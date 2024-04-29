@@ -80,7 +80,7 @@ namespace Chess
                 possibleMovements[position.X, position.Y] = true;
             }
 
-            //especial move small castling
+            //special move small castling
             if (AmountOfMovements == 0 && !chessMatch.Check)
             {
                 Position rook = new(Position.X, Position.Y + 3);
@@ -95,7 +95,7 @@ namespace Chess
                 }
             }
 
-            //especial move big castling
+            //special move big castling
             if (AmountOfMovements == 0 && !chessMatch.Check)
             {
                 Position rook = new(Position.X, Position.Y - 4);
